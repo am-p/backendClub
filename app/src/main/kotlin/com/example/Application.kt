@@ -17,11 +17,11 @@ fun main() {
             get("/health") { call.respond(mapOf("status" to "OK")) }
             post("/login") {
                 val body = call.receive<LoginRequest>()
-                call.respond(LoginResponse(message = "Welcome ${body.username}"))
+                call.respond(LoginResponse(message = "Welcome ${body.email}"))
             }
         }
     }.start(wait = true)
 }
 
-@Serializable data class LoginRequest(val username: String, val password: String)
+@Serializable data class LoginRequest(val email: String, val password: String)
 @Serializable data class LoginResponse(val message: String)
