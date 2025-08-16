@@ -1,27 +1,19 @@
 package com.example
 
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.response.*
-import io.ktor.server.request.*
-import io.ktor.server.routing.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.Serializable
+import com.example.plugins.configureSerialization
+import com.example.plugins.configureSecurity
+import com.example.routes.configureRouting
+import com.example.data.UsersRepository
 
-fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
-        install(ContentNegotiation) { json() }
-        routing {
-            get("/health") { call.respond(mapOf("status" to "OK")) }
-            post("/login") {
-                val body = call.receive<LoginRequest>()
-                call.respond(LoginResponse(message = "Welcome ${body.email}"))
-            }
-        }
-    }.start(wait = true)
+fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
+
+@Suppress("unused")
+fun Application.module() {
+    configureSerialization()
+    configureSecurity()
+    val users = UsersRepository()
+    configureRouting(users)
+
+
 }
-
-@Serializable data class LoginRequest(val email: String, val password: String)
-@Serializable data class LoginResponse(val message: String)
