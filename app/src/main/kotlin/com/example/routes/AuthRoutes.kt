@@ -39,12 +39,11 @@ fun Application.configureRouting(users: UsersRepository) {
         }
 
         authenticate("auth-jwt") {
-            get("/secure/me") {
+            get("/auth/validate") {
                 val p = call.principal<JWTPrincipal>()!!
                 call.respond(
                     mapOf(
-                        "email" to p.subject,
-                        "role" to p.payload.getClaim("role").asString()
+                        ("user" to mapOf("email" to p.subject))
                     )
                 )
             }
