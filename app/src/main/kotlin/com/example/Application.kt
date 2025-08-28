@@ -5,6 +5,8 @@ import com.example.plugins.configureSerialization
 import com.example.plugins.configureSecurity
 import com.example.routes.configureRouting
 import com.example.data.UsersRepository
+import com.example.plugins.configureCors
+import com.example.data.initDatabase
 
 fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 
@@ -12,8 +14,9 @@ fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module() {
     configureSerialization()
     configureSecurity()
+    configureCors()
+    initDatabase()
     val users = UsersRepository()
     configureRouting(users)
-
-
+    
 }
