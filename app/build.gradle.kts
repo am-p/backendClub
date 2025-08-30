@@ -22,6 +22,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:0.55.0")
     implementation("org.jetbrains.exposed:exposed-jdbc:0.55.0")
     implementation("org.xerial:sqlite-jdbc:3.45.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     testImplementation(kotlin("test"))
 }
 
@@ -30,3 +31,10 @@ application {
 }
 
 kotlin { jvmToolchain(21) }
+
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    }
+}
+

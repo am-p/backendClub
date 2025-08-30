@@ -6,9 +6,9 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object UsersTable : Table("users") {
-    val id = uuid("id").autoIncrement().uniqueIndex()
+    val id = uuid("id").uniqueIndex()
     val email = varchar("email", 255).uniqueIndex()
-    val password = varchar("password", 255)
+    val passwordHash = varchar("password_hash", 255)
     val role = varchar("role", 50).default("member")
 
     override val primaryKey = PrimaryKey(id)
