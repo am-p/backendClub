@@ -6,6 +6,7 @@ import com.example.models.LoginResponse
 import com.example.models.RegisterRequest
 import com.example.plugins.JwtService
 import io.ktor.http.*
+import io.ktor.server.application.Application
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -20,8 +21,9 @@ fun Application.configureRouting(users: UsersRepository) {
         post("/auth/register") {
             val body = call.receive<RegisterRequest>()
             try {
-                users.create(body.email, body.password)
-                call.respond(HttpStatusCode.Created, mapOf("message" to "User registered"))
+                val newUser = users.create(body.email, body.password)
+                val token = JwtService.generateToken(subject = newUser.email, role = newUser.role)
+                call.respond(HttpStatusCode.Created, LoginResponse(message = "Welcome ${newUser.email}", token = token))
             } catch (e: IllegalArgumentException) {
                 call.respond(HttpStatusCode.Conflict, mapOf("error" to e.message))
             }
